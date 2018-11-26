@@ -12,8 +12,8 @@ this vote bot.
 
 - When prompted for your username, it will use it in a repetitive way. If you
   want to make it unique every time it votes, you can use the token `%INDEX%`
-  which will be replaced with the actual index number. For example:
-  `test-user-%INDEX%` will result in:<br /><br/>
+  which will be replaced with the actual index number. <br />
+  For example: `test-user-%INDEX%` will result in:<br /><br />
   ```
   test-user-1
   test-user-2
