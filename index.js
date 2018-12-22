@@ -22,14 +22,14 @@ prompt.get({
       required: true,
     },
     url: {
-      pattern: /.*loulouapp\.com\/pollMain\.php\?tag=([0-9]{6}).*$/,
+      pattern: /^.*loulouapp\.com\/pollMain\.php\?tag=([0-9]{6}).*$/,
       description: colors.blue('Enter a valid LouLou URL'),
       message: 'URL must be a valid LouLouApp url, for example: http://loulouapp.com/pollMain.php?tag=622022dilfdoqgzp6jcgn8r',
       required: true,
     },
   },
 }, (err, result) => {
-  const matches = /.*loulouapp\.com\/pollMain\.php\?tag=([0-9]{6}).*/g.exec(result.url);
+  const matches = /^.*loulouapp\.com\/pollMain\.php\?tag=([0-9]{6}).*$/g.exec(result.url);
   if (typeof matches[1] === 'undefined') {
     return false;
   }
@@ -48,13 +48,13 @@ prompt.get({
       const $ = cheerio.load(body);
 
       const answers = [];
-      const answersPrompMessages = [];
+      const answersToPrompt = [];
       $('#answers > li > a').each((index, item) => {
         const text = $(item).find('.answer')[0].children[0].data.trim();
         const id = item.attribs.id;
         const responses = parseInt($(item).find('.responses')[0].children[0].data);
         answers.push({ id, text, responses });
-        answersPrompMessages.push(`[${index + 1}] ${text} (${format_plural(responses, 'answer', 'answers')})`);
+        answersToPrompt.push(`[${index + 1}] ${text} (${format_plural(responses, 'answer', 'answers')})`);
       });
 
       prompt.get({
@@ -63,7 +63,7 @@ prompt.get({
             pattern: /[0-9]+/,
             required: true,
             message: 'You should atleast provide some numbers',
-            description: colors.white(`${answersPrompMessages.join('\n')}`) + colors.blue('\nEnter the numbers of the answers you would like to vote on, separated by comma'),
+            description: colors.white(`${answersToPrompt.join('\n')}`) + colors.blue('\nEnter the numbers of the answers you would like to vote on, separated by comma'),
             before: (value) => value.split(',').map((value) => {
               const v = Math.abs(parseInt(value));
               const index = v - 1;
